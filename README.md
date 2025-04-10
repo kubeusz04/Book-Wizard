@@ -43,7 +43,7 @@ bookapp/
 - Dodawanie postaci związanych z książką
 - Notatki do książek
 - Tworzenie planu fabularnego (plot plan)
-- Stylizacja inspirowana starymi księgami i magią ✨
+
 
 ## 📁 Widoki (Thymeleaf)
 
