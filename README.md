@@ -1,6 +1,6 @@
 # 📚 Book Wizard
 
-**Book Wizard** to aplikacja webowa oparta na Spring Boot, która pozwala na zarządzanie książkami, ich rozdziałami, postaciami, notatkami i planem fabularnym — wszystko w klimacie magicznej księgi ✨📖.
+**Book Wizard** to aplikacja webowa oparta na Spring Boot, która pozwala na zarządzanie książkami, ich rozdziałami, postaciami, notatkami i planem fabularnym ✨📖.
 
 ## 🔧 Technologie
 
