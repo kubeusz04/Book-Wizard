@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj/Edytuj rozdział</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tiny.cloud/1/vnxvsx3vlg4qvaspvdnnghn0j54p9p9jnoykfe52sx12bvh5/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Cinzel', serif;
+            background: radial-gradient(circle at center, #0b2d0b 0%, #051805 100%);
+            color: #d0e8d0;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        h1 {
+            text-align: center;
+            color: #9acd32; /* yellowgreen */
+            margin-bottom: 2rem;
+            text-shadow: 0 0 8px #7ebc47;
+            font-weight: 700;
+        }
+
+        .container {
+            margin-top: 3rem;
+        }
+
+        .btn {
+            font-weight: bold;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-success {
+            background-color: #4caf50; /* medium green */
+            color: #fff;
+            box-shadow: 0 0 8px #66bb6a;
+        }
+
+        .btn-success:hover {
+            background-color: #388e3c;
+            box-shadow: 0 0 12px #81c784;
+        }
+
+        .btn-secondary {
+            background-color: #2e7d32; /* dark green */
+            color: #d0e8d0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4caf50;
+            box-shadow: 0 0 10px #a5d6a7;
+        }
+
+        .form-control {
+            background-color: rgba(30, 50, 30, 0.85);
+            border: 1px solid #7ebc47;
+            color: #d0e8d0;
+            border-radius: 0.4rem;
+        }
+
+        .form-control:focus {
+            background-color: rgba(30, 50, 30, 0.95);
+            border-color: #a5d6a7;
+            box-shadow: 0 0 6px #a5d6a7;
+            color: #f0f9f0;
+        }
+
+        .flex-grow-1 {
+    background: linear-gradient(135deg, rgba(10, 30, 10, 0.85), rgba(30, 50, 30, 0.95));
+    border: 1px solid #7ebc47;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 6px 20px rgba(126, 188, 71, 0.5);
+    color: #d0e8d0;
+    font-family: 'Cinzel', serif;
+}
+
+
+        #character-sidebar {
+            background-color: rgba(10, 30, 10, 0.75);
+            border-left: 1px solid #4caf50;
+            padding-left: 1rem;
+            width: 300px;
+            font-size: 0.95rem;
+            color: #b0d8a0;
+        }
+
+        #character-list li {
+            padding: 0.25rem 0;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        #character-list li:hover {
+            color: #c8f0a0;
+            text-decoration: underline;
+        }
+
+        label {
+            font-weight: 700;
+            color: #a2c879;
+        }
+
+        textarea.form-control {
+            height: 350px;
+        }
+
+        #particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+        /* Główna ramka TinyMCE */
+        .tox-tinymce {
+            border: 1px solid #7ebc47;
+            border-radius: 6px;
+            background-color: #101f10;
+        }
+
+        /* Pasek narzędzi TinyMCE */
+        .tox .tox-editor-header {
+            background-color: #1c3c1c !important;
+            border-bottom: 1px solid #7ebc47 !important;
+            box-shadow: 0 2px 6px rgba(126, 188, 71, 0.3);
+        }
+
+        /* Główna belka z przyciskami */
+        .tox .tox-toolbar__primary {
+            background-color: #1c3c1c !important;
+        }
+
+        /* Tło wewnątrz edytora */
+        .tox .tox-edit-area__iframe {
+            background-color: #101f10 !important;
+            color: #e0f8d0;
+        }
+
+        /* Styl dla stopki TinyMCE (Powered by Tiny + ścieżka) */
+        .tox .tox-statusbar {
+            background-color: #1c3c1c;
+            border-top: 1px solid #7ebc47;
+            color: #a2ff7a;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Ikony w stopce i ścieżki (np. Paragraph -> span) */
+        .tox .tox-statusbar__path-item {
+            color: #a2ff7a;
+        }
+
+        /* Hover efekt na elementach ścieżki */
+        .tox .tox-statusbar__path-item:hover {
+            text-decoration: underline;
+            color: #cfff9d;
+        }
+
+        /* Styl „Powered by Tiny” — zmiana koloru i wyłączenie linka */
+        .tox .tox-statusbar__branding {
+            color: #6ea95c !important;
+        }
+
+        .tox .tox-statusbar__branding a {
+            color: #6ea95c !important;
+            text-decoration: none;
+        }
+        .tox .tox-statusbar__branding a:hover {
+            color: #cfff9d !important;
+        }
+
+        /* Zwiększona specyficzność dla silniejszego nadpisania */
+        .tox.tox-tinymce .tox-statusbar {
+            background-color: #1c3c1c !important;
+            border-top: 1px solid #7ebc47 !important;
+            color: #a2ff7a !important;
+        }
+
+        /* Branding Tiny – link i tekst */
+        .tox.tox-tinymce .tox-statusbar__branding,
+        .tox.tox-tinymce .tox-statusbar__branding a {
+            color: #6ea95c !important;
+            background-color: transparent !important;
+            text-decoration: none !important;
+        }
+
+        .tox.tox-tinymce .tox-statusbar__branding a:hover {
+            color: #cfff9d !important;
+        }
+
+        /* Ścieżki w edytorze */
+        .tox.tox-tinymce .tox-statusbar__path-item {
+            color: #a2ff7a !important;
+        }
+
+        .tox.tox-tinymce .tox-statusbar__path-item:hover {
+            color: #cfff9d !important;
+            text-decoration: underline !important;
+        }
+
+        /* Kolor ikon na pasku narzędzi na ten sam co Powered by Tiny */
+        .tox .tox-toolbar button svg,
+        .tox .tox-toolbar button i {
+            fill: #6ea95c !important;   /* dla SVG */
+            color: #6ea95c !important;  /* dla font-icon */
+        }
+
+        /* Ikony na hover */
+        .tox .tox-toolbar button:hover svg,
+        .tox .tox-toolbar button:hover i {
+            fill: #cfff9d !important;
+            color: #cfff9d !important;
+        }
+
+        /* Aktywny przycisk */
+        .tox .tox-toolbar button[aria-pressed="true"] svg,
+        .tox .tox-toolbar button[aria-pressed="true"] i {
+            fill: #cfff9d !important;
+            color: #cfff9d !important;
+        }
+
+        .tox .tox-toolbar button svg path,
+.tox .tox-toolbar button svg circle,
+.tox .tox-toolbar button svg rect {
+    fill: #6ea95c !important;
+    stroke: #6ea95c !important;
+}
+
+.tox .tox-toolbar button:hover svg path,
+.tox .tox-toolbar button:hover svg circle,
+.tox .tox-toolbar button:hover svg rect {
+    fill: #cfff9d !important;
+    stroke: #cfff9d !important;
+}
+
+.tox .tox-toolbar button[aria-pressed="true"] svg path,
+.tox .tox-toolbar button[aria-pressed="true"] svg circle,
+.tox .tox-toolbar button[aria-pressed="true"] svg rect {
+    fill: #cfff9d !important;
+    stroke: #cfff9d !important;
+}
+
+    </style>
+
+
+
+</head>
+<body>
+<div id="particles-js"></div>
+
+
+<div class="container d-flex gap-4">
+    <!-- Główna część z formularzem -->
+    <div class="flex-grow-1 bg-dark p-4 rounded shadow-lg" style="background-color: rgba(40, 20, 60, 0.85);">
+        <a href="/" class="btn btn-secondary mb-3">Powrót do strony głównej</a>
+        <h1>Dodaj / Edytuj rozdział</h1>
+
+        <form th:action="@{/books/{bookId}/chapters/save(bookId=${bookId})}" method="post" th:object="${chapter}">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="mb-3">
+                <label>Tytuł rozdziału</label>
+                <input type="text" class="form-control" th:field="*{title}" required>
+            </div>
+
+            <div class="mb-3">
+                <label>Treść</label>
+                <textarea class="form-control" th:field="*{content}" rows="10" required></textarea>
+                <button type="button" class="btn btn-secondary mt-2" id="generate-ai-btn">Wygeneruj treść AI</button>
+            </div>
+
+            <button class="btn btn-success">Zapisz</button>
+            <a th:href="@{/books/{bookId}/chapters(bookId=${bookId})}" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+
+    <!-- Panel boczny z postaciami -->
+    <div id="character-sidebar">
+        <h4>Postacie w książce</h4>
+        <ul id="character-list" class="list-unstyled"></ul>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/VincentGarreau/particles.js/particles.min.js"></script>
+
+<script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: "#c0ffb3" },
+        shape: { type: "star" },
+        opacity: { value: 0.7, random: true },
+        size: { value: 4, random: true },
+        line_linked: { enable: false },
+        move: { enable: true, speed: 0.6, direction: "none", out_mode: "out" }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: true, mode: "repulse" }
+        },
+        modes: {
+          repulse: { distance: 100, duration: 0.4 }
+        }
+      },
+      retina_detect: true
+    });
+
+</script>
+
+
+<!-- Inicjalizacja TinyMCE -->
+<script>
+    tinymce.init({
+    selector: 'textarea',
+    plugins: 'advlist autolink lists link image charmap print preview anchor',
+    toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat',
+    menubar: false,
+    height: 300,
+    content_style: `
+        body {
+            background-color: #0f1f0f;
+            color: #d0e8d0;
+            font-family: 'Cinzel', serif;
+            padding: 1rem;
+        }
+        h1, h2, h3, strong {
+            color: #a2ff7a;
+        }
+        a {
+            color: #7ebc47;
+        }
+        ::selection {
+            background: #7ebc47;
+            color: #0f1f0f;
+        }
+    `,
+    setup: function(editor) {
+        editor.on('change', function() {
+            editor.save();
+        });
+    }
+
+});
+
+</script>
+
+<!-- AI generator -->
+<script>
+    document.getElementById('generate-ai-btn').addEventListener('click', async function () {
+        const userPrompt = prompt("Opisz, jaką scenę chcesz wygenerować:");
+        if (!userPrompt) return;
+
+        try {
+            const response = await fetch('/api/ai/generate-scene', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: userPrompt })
+            });
+
+            const data = await response.json();
+            if (data.content) {
+                tinymce.activeEditor.setContent(data.content);
+            } else {
+                alert("Nie udało się wygenerować treści.");
+            }
+        } catch (error) {
+            console.error("Błąd podczas generowania treści AI:", error);
+            alert("Wystąpił błąd podczas komunikacji z AI.");
+        }
+    });
+</script>
+
+<!-- Pobieranie postaci -->
+<script th:inline="javascript">
+    const bookId = [[${bookId}]];
+
+    fetch(`/books/${bookId}/characters/api`)
+        .then(response => response.json())
+        .then(characters => {
+            const list = document.getElementById('character-list');
+            characters.forEach(c => {
+                const li = document.createElement('li');
+                li.textContent = c.name;
+                li.title = c.description || '';
+                li.addEventListener('click', () => {
+                    tinymce.activeEditor.execCommand('mceInsertContent', false, c.name);
+                });
+                list.appendChild(li);
+            });
+        })
+        .catch(err => {
+            console.error("Nie udało się pobrać postaci:", err);
+        });
+</script>
+
+</body>
+</html>
