@@ -21,7 +21,7 @@ Book Wizard to aplikacja webowa stworzona w Spring Boot, która wspiera autorów
 
 ## 🧠 AI - Pisanie rozdziałów
 
-Wykorzystując funkcję `AiController`, użytkownik może poprosić aplikację o automatyczne wygenerowanie rozdziału książki na podstawie wprowadzonego tematu lub planu.
+Użytkownik może poprosić o automatyczne wygenerowanie rozdziału książki na podstawie wprowadzonego tematu lub planu.
 
 ## 🔧 Instalacja lokalna
 
@@ -53,14 +53,19 @@ http://localhost:8080
 ## 📁 Struktura projektu
 
 ```
-src/
-├── main/
-│   ├── java/com/example/bookapp/
-│   │   ├── controller/    # Kontrolery REST
-│   │   ├── model/         # Modele danych (Book, Chapter, Character, itd.)
-│   │   └── BookappApplication.java
-│   └── resources/
-│       └── templates/     # Widoki HTML (jeśli używane)
+bookapp/
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/bookapp/
+│   │   │   ├── controller/       # Kontrolery 
+│   │   │   ├── model/            # Modele danych (Book, Chapter, Note, itd.)
+│   │   │   ├── repository/       # Interfejsy repozytoriów JPA
+│   │   │   └── service/          # Logika biznesowa
+│   │   └── resources/
+│   │       ├── templates/        # Widoki HTML (Thymeleaf)
+│   │       └── application.properties
+│   └── test/                   
+├── pom.xml                       # Plik konfiguracji Maven
 ```
 
 ## 📄 Plik `pom.xml`
